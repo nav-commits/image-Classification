@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import FaceDetection from './Components/views/FaceDection/FaceDetection';
-import Game from './Components/views/Game';
+import ImageClassification from './Components/views/Classification';
 import Home from './Components/views/Home';
-import { Routes, Route, BrowserRouter } from 'react-router-dom'; // Import the BrowserRouter, Route and Link components
+import { Routes, Route } from 'react-router-dom'; // Import the BrowserRouter, Route and Link components
 
 function App() {
     return (
@@ -15,13 +15,9 @@ function App() {
                 <Route path='/Detection' element={<FaceDetection />} />
             </Routes>
             <Routes>
-                <Route path='/Game' element={<Game />} />
+                <Route path='/ImageClassification' element={<ImageClassification />} />
             </Routes>
         </>
-
-        // <>
-        //   <FaceDetection />
-        // </>
     );
 }
 

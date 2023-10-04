@@ -1,9 +1,13 @@
 import React from 'react';
 import './Button.css';
 
-const Button = ({ onClick, text }) => {
+const Button = ({ onClick, text, marginTop, marginLeft }) => {
     return (
-        <button className="Button" onClick={onClick}>
+        <button
+            style={{ marginTop: marginTop, marginLeft: marginLeft }}
+            className='Button'
+            onClick={onClick}
+        >
             {text}
         </button>
     );

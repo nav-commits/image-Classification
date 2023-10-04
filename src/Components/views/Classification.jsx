@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import Button from '../Atoms/Button/Button';
 
-function ImageClassificationGame() {
+function ImageClassification() {
     const [model, setModel] = useState(null);
     const [imgUrl, setImageUrl] = useState(false);
     const [results, setResults] = useState([]);
@@ -11,7 +10,6 @@ function ImageClassificationGame() {
     const [history, setHistory] = useState([]);
 
     const ref = React.useRef(null);
-    const ImageUrl = React.useRef(null);
 
     // Load the MobileNet model
     useEffect(() => {
@@ -37,9 +35,7 @@ function ImageClassificationGame() {
         }
     };
     console.log(results);
-    console.log(history)
-
-    // Render the game interface
+    console.log(history);
 
     const handleReveal = () => {
         setReveal(true);
@@ -52,10 +48,10 @@ function ImageClassificationGame() {
     }, [imgUrl]);
     return (
         <div>
-            <h1 style={{ textAlign: 'center' }}>Image Classification</h1>
+            <h1 style={{ textAlign: 'center' }}>🤖 ImageMaster </h1>
             <h3 style={{ margin: '30px' }}>Please select an image</h3>
             <div style={{ margin: '30px' }}>
-                <input type='file' accept='image/' capture='camera' onChange={upLoadImage} />
+                <input className="fileInput" type='file' accept='image/' capture='camera' onChange={upLoadImage} />
             </div>
             <div
                 style={{
@@ -91,23 +87,44 @@ function ImageClassificationGame() {
                     ))}
                 </div>
             </div>
-            <button style={{ marginTop: '50px', marginLeft: '30px' }} onClick={handleImageSelect}>
-                identify
-            </button>
-            <Button text='Identity' />
+            <Button
+                text='Identify'
+                onClick={handleImageSelect}
+                marginTop={'50px'}
+                marginLeft={'30px'}
+            />
 
-            <h1>Recent Images</h1>
-            <div style={{ backgroundColor: 'blue', padding: '30px', height: '200px', margin: '10px', display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                {history.length > 0 && history.map((image, idx) => {
-                    return (
-                        <div key={idx}>
-                            <img style={{ width: '200px', height: '200px' }} src={image} alt='Recent Prediction' />
-                        </div>
-                    );
-                })}
-            </div>
+            {history.length > 0 && (
+                <>
+                    <h1 style={{ marginLeft: '20px' }}>Recent Images</h1>
+                    <div
+                        style={{
+                            backgroundColor: '#6CB4EE',
+                            padding: '30px',
+                            height: '280px',
+                            margin: '10px',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: '20px',
+                        }}
+                    >
+                        {history.length > 0 &&
+                            history.map((image, idx) => {
+                                return (
+                                    <div key={idx}>
+                                        <img
+                                            style={{ width: '200px', height: '220px' }}
+                                            src={image}
+                                            alt='Recent Prediction'
+                                        />
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </>
+            )}
         </div>
     );
 }
 
-export default ImageClassificationGame;
+export default ImageClassification;
