@@ -38,7 +38,10 @@ function ImageClassification() {
     console.log(history);
 
     const handleReveal = () => {
-        setReveal(true);
+        setReveal(!reveal);
+    };
+    const handleRemove = () => {
+        setResults([]);
     };
 
     useEffect(() => {
@@ -51,7 +54,13 @@ function ImageClassification() {
             <h1 style={{ textAlign: 'center' }}>🤖 ImageMaster </h1>
             <h3 style={{ margin: '30px' }}>Please select an image</h3>
             <div style={{ margin: '30px' }}>
-                <input className="fileInput" type='file' accept='image/' capture='camera' onChange={upLoadImage} />
+                <input
+                    className='fileInput'
+                    type='file'
+                    accept='image/'
+                    capture='camera'
+                    onChange={upLoadImage}
+                />
             </div>
             <div
                 style={{
@@ -65,7 +74,7 @@ function ImageClassification() {
             >
                 {imgUrl && (
                     <img
-                        style={{ height: '300px', width: '300px' }}
+                        style={{ height: '500px', width: '450px' }}
                         src={imgUrl}
                         alt='upload preview'
                         ref={ref}
@@ -79,7 +88,11 @@ function ImageClassification() {
                         >
                             <h2 key={result.className}>{result.className}</h2>
                             {/*  disabled this until you pick one */}
-                            {reveal && <p key={result.className}>{result.probability}</p>}
+                            {reveal && (
+                                <p key={result.className}>
+                                    {(result.probability * 100).toFixed(2)} %
+                                </p>
+                            )}
                             <button onClick={handleReveal} style={{ marginTop: '50px' }}>
                                 Reveal
                             </button>
@@ -87,16 +100,27 @@ function ImageClassification() {
                     ))}
                 </div>
             </div>
-            <Button
-                text='Identify'
-                onClick={handleImageSelect}
-                marginTop={'50px'}
-                marginLeft={'30px'}
-            />
+            {imgUrl && (
+                <Button
+                    text='Identify'
+                    onClick={handleImageSelect}
+                    marginTop={'50px'}
+                    marginLeft={'30px'}
+                />
+            )}
+            {reveal && (
+                <Button
+                    text='Remove'
+                    onClick={handleRemove}
+                    marginTop={'50px'}
+                    marginLeft={'10px'}
+                    backgroundColor={'red'}
+                />
+            )}
 
             {history.length > 0 && (
                 <>
-                    <h1 style={{ marginLeft: '20px' }}>Recent Images</h1>
+                    <h1 style={{ marginLeft: '20px' }}>Recent Uploaded Images</h1>
                     <div
                         style={{
                             backgroundColor: '#6CB4EE',
