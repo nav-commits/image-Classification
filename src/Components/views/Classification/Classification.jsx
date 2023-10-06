@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as mobilenet from '@tensorflow-models/mobilenet';
-import Button from '../Atoms/Button/Button';
+import Button from '../../Atoms/Button/Button';
+import './Classification.css';
 
 function ImageClassification() {
     const [model, setModel] = useState(null);
@@ -89,9 +90,19 @@ function ImageClassification() {
                             <h2 key={result.className}>{result.className}</h2>
                             {/*  disabled this until you pick one */}
                             {reveal && (
-                                <p key={result.className}>
-                                    {(result.probability * 100).toFixed(2)} %
-                                </p>
+                                <>
+                                    <div key={result.className} className='progress-bar'>
+                                        <div
+                                            className='progress'
+                                            style={{
+                                                width: `${(result.probability * 100).toFixed(2)}%`,
+                                            }}
+                                        >
+                                            {(result.probability * 100).toFixed(2)}%
+                                        </div>
+                                    </div>
+                                </>
+                                
                             )}
                             <button onClick={handleReveal} style={{ marginTop: '50px' }}>
                                 Reveal
