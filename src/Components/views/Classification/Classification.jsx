@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import Button from '../../Atoms/Button/Button';
 import './Classification.css';
+import { useNavigate } from 'react-router-dom';
+import * as tf from '@tensorflow/tfjs'
 
 function ImageClassification() {
     const [model, setModel] = useState(null);
@@ -11,6 +13,7 @@ function ImageClassification() {
     const [history, setHistory] = useState([]);
 
     const ref = React.useRef(null);
+    console.log('Using TensorFlow backend: ', tf.getBackend());
 
     // Load the MobileNet model
     useEffect(() => {
@@ -50,9 +53,16 @@ function ImageClassification() {
             setHistory([imgUrl, ...history]);
         }
     }, [imgUrl]);
+
+    const navigate = useNavigate();
+
+    const handleButtonClick = () => {
+        navigate('/TextImageGenerator');
+    };
+
     return (
         <div>
-            <h1 style={{ textAlign: 'center' }}>🤖 ImageMaster </h1>
+            <h1 style={{ textAlign: 'center' }}>Welcome to 🤖 ImageMaster </h1>
             <h3 style={{ margin: '30px' }}>Please select an image</h3>
             <div style={{ margin: '30px' }}>
                 <input
@@ -88,7 +98,6 @@ function ImageClassification() {
                             style={{ border: '2px solid black', padding: '20px', width: '300px' }}
                         >
                             <h2 key={result.className}>{result.className}</h2>
-                            {/*  disabled this until you pick one */}
                             {reveal && (
                                 <>
                                     <div key={result.className} className='progress-bar'>
@@ -102,7 +111,6 @@ function ImageClassification() {
                                         </div>
                                     </div>
                                 </>
-                                
                             )}
                             <button onClick={handleReveal} style={{ marginTop: '50px' }}>
                                 Reveal
@@ -112,13 +120,16 @@ function ImageClassification() {
                 </div>
             </div>
             {imgUrl && (
-                <Button
-                    text='Identify'
-                    onClick={handleImageSelect}
-                    marginTop={'50px'}
-                    marginLeft={'30px'}
-                />
+                <>
+                    <Button
+                        text='Identify'
+                        onClick={handleImageSelect}
+                        marginTop={'50px'}
+                        marginLeft={'30px'}
+                    />
+                </>
             )}
+
             {reveal && (
                 <Button
                     text='Remove'
@@ -157,6 +168,21 @@ function ImageClassification() {
                             })}
                     </div>
                 </>
+            )}
+            {imgUrl && (
+                <div style={{ margin: '20px' }}>
+                    <h2 style={{ margin: '20px' }}>
+                        Please press continue to checkout Text Image Genorator
+                    </h2>
+
+                    <Button
+                        text='Continue'
+                        onClick={handleButtonClick}
+                        marginTop={'50px'}
+                        marginLeft={'10px'}
+                        backgroundColor={'blue'}
+                    />
+                </div>
             )}
         </div>
     );

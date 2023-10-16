@@ -1,8 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import FaceDetection from './Components/views/FaceDection/FaceDetection';
+import FaceRecognition from './Components/views/FaceRecognition/FaceRecognition';
 import ImageClassification from './Components/views/Classification/Classification';
 import Home from './Components/views/Home';
+import TextImageGenerator from './Components/views/TextImageGenerator';
+
 import { Routes, Route } from 'react-router-dom'; // Import the BrowserRouter, Route and Link components
 
 function App() {
@@ -12,10 +14,13 @@ function App() {
                 <Route path='/' exact element={<Home />} />
             </Routes>
             <Routes>
-                <Route path='/Detection' element={<FaceDetection />} />
+                <Route path='/FaceRec' element={<FaceRecognition />} />
             </Routes>
             <Routes>
                 <Route path='/ImageClassification' element={<ImageClassification />} />
+            </Routes>
+            <Routes>
+                <Route path='/TextImageGenerator' element={<TextImageGenerator />} />
             </Routes>
         </>
     );
