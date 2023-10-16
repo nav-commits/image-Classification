@@ -10,7 +10,7 @@ const FaceRecognition = () => {
     const [imageURL, setImageURL] = useState([]);
     const [uploaded, setUploaded] = useState(false);
     const [faceRecognized, setFaceRecognized] = useState(false);
-    const [successMessage, setSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -33,7 +33,8 @@ const FaceRecognition = () => {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+                authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+
             },
             body: JSON.stringify({
                 response_as_dict: true,
