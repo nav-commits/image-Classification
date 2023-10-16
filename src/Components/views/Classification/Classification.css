@@ -10,3 +10,11 @@
     text-align: center;
     line-height: 20px;
 }
+.images-container {
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+}

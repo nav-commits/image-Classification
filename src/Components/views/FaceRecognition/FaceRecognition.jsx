@@ -12,10 +12,11 @@ const FaceRecognition = () => {
     const [faceRecognized, setFaceRecognized] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
+    let imageSelected = imageURL[0];
+
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
-    let imageSelected = imageURL[0];
 
     const onFileUpload = () => {
         //  upload file to firebase storage
@@ -33,8 +34,7 @@ const FaceRecognition = () => {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
-
+                authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             },
             body: JSON.stringify({
                 response_as_dict: true,
@@ -47,13 +47,11 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/add_face', options)
             .then((response) => response.json())
-            .then((response) => console.log(response))
+            .then((response) => setSuccessMessage('Successfully uploaded file'))
             .catch((err) => console.error(err));
 
         setUploaded(true);
     };
-
-    console.log(successMessage);
 
     // get all images from firebase storage
 
@@ -96,7 +94,7 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/recognize', options)
             .then((response) => response.json())
-            .then((response) => setSuccessMessage(response['amazon']['status']))
+            .then((response) => setSuccessMessage('Face Recognized successfully'))
             .catch((err) => console.error(err));
 
         setFaceRecognized(true);
@@ -114,8 +112,8 @@ const FaceRecognition = () => {
                 <Button text='Upload' onClick={onFileUpload} backgroundColor={'blue'} />
             </div>
             <h1 style={{ textAlign: 'center' }}>List of Recognized Faces</h1>
-            {imageURL.map((url, idx) => {
-                return (
+            {imageURL.length > 0 ? (
+                imageURL.map((url, idx) => (
                     <img
                         key={idx}
                         src={url}
@@ -127,8 +125,10 @@ const FaceRecognition = () => {
                             objectFit: 'cover',
                         }}
                     />
-                );
-            })}
+                ))
+            ) : (
+                <h2 style={{ textAlign: 'center', marginTop: '80px' }}>None....</h2>
+            )}
             {uploaded && (
                 <div style={{ marginLeft: '30px' }}>
                     <Button
@@ -140,9 +140,11 @@ const FaceRecognition = () => {
                     />
                 </div>
             )}
-            {faceRecognized && (
+            <p style={{ color: 'green', marginLeft: '50px', fontWeight: 'bold' }}>
+                {successMessage}
+            </p>
+            {faceRecognized && successMessage === 'Face Recognized successfully' && (
                 <>
-                    <p style={{ color: 'green', marginLeft:"20px" }}>{successMessage}</p>
                     <Button
                         text='Continue'
                         onClick={handleButtonClick}
@@ -150,7 +152,6 @@ const FaceRecognition = () => {
                         marginLeft={'40px'}
                         backgroundColor={'blue'}
                     />
-                    
                 </>
             )}
         </>

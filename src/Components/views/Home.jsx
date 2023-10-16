@@ -4,7 +4,6 @@ import Button from '../Atoms/Button/Button';
 
 function Home() {
     const navigate = useNavigate();
-    console.log(navigate)
     const handleButtonClick = () => {
         navigate('/FaceRec')
     };

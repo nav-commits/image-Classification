@@ -42,11 +42,10 @@ export default function TextImageGenerator() {
             .catch((err) => console.error(err));
     };
 
-    console.log(Images);
     return (
         <div>
             <div style={{ margin: '20px', textAlign: 'center' }}>
-                <h1>Text Image generator</h1>
+                <h1>Text Image Generator</h1>
                 <div
                     style={{
                         display: 'flex',
@@ -71,7 +70,7 @@ export default function TextImageGenerator() {
                         backgroundColor={'blue'}
                     />
                 </div>
-                <h1>AI Genorated Images</h1>
+                <h1>AI Generated Images</h1>
                 <div style={{ display: "grid", gridTemplateColumns: 'repeat(3, 2fr)', gap: '15px' }}>
                     {Images &&
                         Images.map((image, idx) => (
