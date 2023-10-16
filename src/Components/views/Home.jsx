@@ -3,10 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../Atoms/Button/Button';
 
 function Home() {
-
-
-    console.log(process.env.REACT_APP_API_KEY)
-
     const navigate = useNavigate();
     const handleButtonClick = () => {
         navigate('/FaceRec')
