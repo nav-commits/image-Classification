@@ -24,6 +24,7 @@ function ImageClassification() {
         loadModel();
     }, []);
 
+    // upload image
     const upLoadImage = (e) => {
         if (e.target.files[0]) {
             const url = URL.createObjectURL(e.target.files[0]);
@@ -38,8 +39,6 @@ function ImageClassification() {
             setResults(result);
         }
     };
-    console.log(results);
-    console.log(history);
 
     const handleReveal = () => {
         setReveal(!reveal);
@@ -49,10 +48,10 @@ function ImageClassification() {
     };
 
     useEffect(() => {
-        if (imgUrl) {
-            setHistory([imgUrl, ...history]);
+        if (imgUrl && !history.includes(imgUrl)) {
+            setHistory((prevHistory) => [imgUrl, ...prevHistory]);
         }
-    }, [imgUrl]);
+    }, [imgUrl, history]);
 
     const navigate = useNavigate();
 
