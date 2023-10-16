@@ -4,16 +4,18 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../../Atoms/Button/Button';
 import { useNavigate } from 'react-router-dom';
+import { useFaceRecognition } from '../../../Context';
 
 const FaceRecognition = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageURL, setImageURL] = useState([]);
     const [uploaded, setUploaded] = useState(false);
-    const [faceRecognized, setFaceRecognized] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
 
+    const { faceRecognized, setFaceRecognized } = useFaceRecognition();
     let imageSelected = imageURL[0];
 
+    console.log(faceRecognized)
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
