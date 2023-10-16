@@ -10,6 +10,7 @@ const FaceRecognition = () => {
     const [imageURL, setImageURL] = useState([]);
     const [uploaded, setUploaded] = useState(false);
     const [faceRecognized, setFaceRecognized] = useState(false);
+    
 
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -53,23 +54,29 @@ const FaceRecognition = () => {
     };
 
     // get all images from firebase storage
+
     useEffect(() => {
-        const listRef = ref(storage, 'images/');
-        listAll(listRef)
-            .then((res) => {
-                res.items.forEach((itemRef) => {
-                    getDownloadURL(itemRef).then((url) => {
-                        setImageURL((prevArray) => [...prevArray, url]);
-                    });
+        const listImages = async () => {
+            try {
+                // gets all images from firebase storage
+                const listRef = ref(storage, 'images/');
+                const res = await listAll(listRef);
+                const urlPromises = res.items.map(async (itemRef) => {
+                    return getDownloadURL(itemRef);
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                // waits for all promises to resolve
+                const urls = await Promise.all(urlPromises);
+                // sets the state to the array of urls
+                setImageURL(urls);
+            } catch (error) {
+                console.error('Error fetching images from Firebase Storage:', error);
+            }
+        };
+        listImages();
     }, []);
 
-    const FaceRecognition = () => {
 
+    const FaceRecognition = () => {
         const options = {
             method: 'POST',
             headers: {
@@ -110,7 +117,7 @@ const FaceRecognition = () => {
                     backgroundColor={'blue'}
                 />
             </div>
-            <h1 style={{ textAlign: 'center' }}>List of Recognized Images</h1>
+            <h1 style={{ textAlign: 'center' }}>List of Recognized Faces</h1>
             {imageURL.map((url, idx) => {
                 return (
                     <img
@@ -137,7 +144,6 @@ const FaceRecognition = () => {
                 marginLeft={'40px'}
                 backgroundColor={'blue'}
             />}
-
 
         </>
     );
