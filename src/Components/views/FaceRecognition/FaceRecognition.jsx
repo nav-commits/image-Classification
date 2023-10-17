@@ -4,18 +4,21 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../../Atoms/Button/Button';
 import { useNavigate } from 'react-router-dom';
+import { useFaceRecognition } from '../../../Context';
 
 const FaceRecognition = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageURL, setImageURL] = useState([]);
     const [uploaded, setUploaded] = useState(false);
-    const [faceRecognized, setFaceRecognized] = useState(false);
-    const [successMessage, setSuccessMessage] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
+    const { faceRecognized, setFaceRecognized } = useFaceRecognition();
+    let imageSelected = imageURL[0];
+
+    console.log(faceRecognized);
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
-    let imageSelected = imageURL[0];
 
     const onFileUpload = () => {
         //  upload file to firebase storage
@@ -46,13 +49,16 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/add_face', options)
             .then((response) => response.json())
-            .then((response) => console.log(response))
+            .then((response) => {
+                console.log(response)
+                if (response['amazon']['status']=== 'success') {
+                    setSuccessMessage('Successfully uploaded file');
+                    setUploaded(true);
+                }
+            })
             .catch((err) => console.error(err));
 
-        setUploaded(true);
     };
-
-    console.log(successMessage);
 
     // get all images from firebase storage
 
@@ -95,10 +101,15 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/recognize', options)
             .then((response) => response.json())
-            .then((response) => setSuccessMessage(response['amazon']['status']))
+            .then((response) => {
+                console.log(response)
+                if (response['amazon']['status'] === 'success') {
+                    setSuccessMessage('Face Recognized');
+                    setFaceRecognized(true);
+                }
+            })
             .catch((err) => console.error(err));
 
-        setFaceRecognized(true);
     };
 
     const navigate = useNavigate();
@@ -113,8 +124,8 @@ const FaceRecognition = () => {
                 <Button text='Upload' onClick={onFileUpload} backgroundColor={'blue'} />
             </div>
             <h1 style={{ textAlign: 'center' }}>List of Recognized Faces</h1>
-            {imageURL.map((url, idx) => {
-                return (
+            {imageURL.length > 0 ? (
+                imageURL.map((url, idx) => (
                     <img
                         key={idx}
                         src={url}
@@ -126,8 +137,10 @@ const FaceRecognition = () => {
                             objectFit: 'cover',
                         }}
                     />
-                );
-            })}
+                ))
+            ) : (
+                <h2 style={{ textAlign: 'center', marginTop: '80px' }}>None....</h2>
+            )}
             {uploaded && (
                 <div style={{ marginLeft: '30px' }}>
                     <Button
@@ -139,9 +152,11 @@ const FaceRecognition = () => {
                     />
                 </div>
             )}
-            {faceRecognized && (
+            <p style={{ color: 'green', marginLeft: '50px', fontWeight: 'bold' }}>
+                {successMessage}
+            </p>
+            {faceRecognized && successMessage === 'Face Recognized' && (
                 <>
-                    <p style={{ color: 'green', marginLeft:"20px" }}>{successMessage}</p>
                     <Button
                         text='Continue'
                         onClick={handleButtonClick}
@@ -149,7 +164,6 @@ const FaceRecognition = () => {
                         marginLeft={'40px'}
                         backgroundColor={'blue'}
                     />
-                    
                 </>
             )}
         </>

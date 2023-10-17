@@ -3,7 +3,8 @@ import * as mobilenet from '@tensorflow-models/mobilenet';
 import Button from '../../Atoms/Button/Button';
 import './Classification.css';
 import { useNavigate } from 'react-router-dom';
-import * as tf from '@tensorflow/tfjs'
+import * as tf from '@tensorflow/tfjs';
+import ImagesContent from '../../Organisms/ImagesContent/ImagesContent';
 
 function ImageClassification() {
     const [model, setModel] = useState(null);
@@ -14,6 +15,7 @@ function ImageClassification() {
 
     const ref = React.useRef(null);
     console.log('Using TensorFlow backend: ', tf.getBackend());
+    const navigate = useNavigate();
 
     // Load the MobileNet model
     useEffect(() => {
@@ -47,13 +49,13 @@ function ImageClassification() {
         setResults([]);
     };
 
+    // Add image to history
     useEffect(() => {
         if (imgUrl && !history.includes(imgUrl)) {
             setHistory((prevHistory) => [imgUrl, ...prevHistory]);
         }
     }, [imgUrl, history]);
 
-    const navigate = useNavigate();
 
     const handleButtonClick = () => {
         navigate('/TextImageGenerator');
@@ -73,14 +75,7 @@ function ImageClassification() {
                 />
             </div>
             <div
-                style={{
-                    margin: '20px',
-                    padding: '20px',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '20px',
-                    justifyContent: 'center',
-                }}
+                className='images-container'
             >
                 {imgUrl && (
                     <img
@@ -141,37 +136,13 @@ function ImageClassification() {
 
             {history.length > 0 && (
                 <>
-                    <h1 style={{ marginLeft: '20px' }}>Recent Uploaded Images</h1>
-                    <div
-                        style={{
-                            backgroundColor: '#6CB4EE',
-                            padding: '30px',
-                            height: '280px',
-                            margin: '10px',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: '20px',
-                        }}
-                    >
-                        {history.length > 0 &&
-                            history.map((image, idx) => {
-                                return (
-                                    <div key={idx}>
-                                        <img
-                                            style={{ width: '200px', height: '220px' }}
-                                            src={image}
-                                            alt='Recent Prediction'
-                                        />
-                                    </div>
-                                );
-                            })}
-                    </div>
+                    <ImagesContent history={history} />
                 </>
             )}
             {imgUrl && (
                 <div style={{ margin: '20px' }}>
                     <h2 style={{ margin: '20px' }}>
-                        Please press continue to checkout Text Image Genorator
+                        Please press continue to checkout Text Image Generator.
                     </h2>
 
                     <Button
