@@ -15,7 +15,7 @@ const FaceRecognition = () => {
     const { faceRecognized, setFaceRecognized } = useFaceRecognition();
     let imageSelected = imageURL[0];
 
-    console.log(faceRecognized)
+    console.log(faceRecognized);
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
@@ -49,10 +49,15 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/add_face', options)
             .then((response) => response.json())
-            .then((response) => setSuccessMessage('Successfully uploaded file'))
+            .then((response) => {
+                console.log(response)
+                if (response['amazon']['status']=== 'success') {
+                    setSuccessMessage('Successfully uploaded file');
+                    setUploaded(true);
+                }
+            })
             .catch((err) => console.error(err));
 
-        setUploaded(true);
     };
 
     // get all images from firebase storage
@@ -96,10 +101,15 @@ const FaceRecognition = () => {
 
         fetch('https://api.edenai.run/v2/image/face_recognition/recognize', options)
             .then((response) => response.json())
-            .then((response) => setSuccessMessage('Face Recognized successfully'))
+            .then((response) => {
+                console.log(response)
+                if (response['amazon']['status'] === 'success') {
+                    setSuccessMessage('Face Recognized');
+                    setFaceRecognized(true);
+                }
+            })
             .catch((err) => console.error(err));
 
-        setFaceRecognized(true);
     };
 
     const navigate = useNavigate();
@@ -145,7 +155,7 @@ const FaceRecognition = () => {
             <p style={{ color: 'green', marginLeft: '50px', fontWeight: 'bold' }}>
                 {successMessage}
             </p>
-            {faceRecognized && successMessage === 'Face Recognized successfully' && (
+            {faceRecognized && successMessage === 'Face Recognized' && (
                 <>
                     <Button
                         text='Continue'

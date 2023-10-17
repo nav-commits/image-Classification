@@ -13,7 +13,6 @@ function App() {
             <Routes>
                 <Route exact path='/' element={<Home />} />
                 <Route path='/FaceRec' element={<FaceRecognition />} />
-
                 <Route exact element={<PrivateRoute />}>
                     <Route exact path='/ImageClassification' element={<ImageClassification />} />
                 </Route>
