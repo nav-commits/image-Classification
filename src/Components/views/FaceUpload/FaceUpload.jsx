@@ -4,7 +4,6 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../../Atoms/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import { useFaceRecognition } from '../../../Context';
 
 const FaceUpload = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -78,36 +77,6 @@ const FaceUpload = () => {
         listImages();
     }, []);
 
-    // const FaceRecognition = () => {
-    //     const options = {
-    //         method: 'POST',
-    //         headers: {
-    //             accept: 'application/json',
-    //             'content-type': 'application/json',
-    //             authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-    //         },
-    //         body: JSON.stringify({
-    //             response_as_dict: true,
-    //             attributes_as_list: false,
-    //             show_original_response: false,
-    //             providers: 'amazon',
-    //             file_url: imageSelected,
-    //         }),
-    //     };
-
-    //     fetch('https://api.edenai.run/v2/image/face_recognition/recognize', options)
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             console.log(response)
-    //             if (response['amazon']['status'] === 'success') {
-    //                 setSuccessMessage('Face Recognized');
-    //                 setFaceRecognized(true);
-    //             }
-    //         })
-    //         .catch((err) => console.error(err));
-
-    // };
-
     const navigate = useNavigate();
     const handleButtonClick = () => {
         navigate('/FaceRec');
@@ -137,16 +106,6 @@ const FaceUpload = () => {
             ) : (
                 <h2 style={{ textAlign: 'center', marginTop: '80px' }}>None....</h2>
             )}
-
-            {/* <div style={{ marginLeft: '30px' }}>
-                    <Button
-                        text='Face Recognition'
-                        onClick={FaceRecognition}
-                        marginTop={'50px'}
-                        marginLeft={'10px'}
-                        backgroundColor={'blue'}
-                    />
-                </div> */}
 
             <p style={{ color: 'green', marginLeft: '50px', fontWeight: 'bold' }}>
                 {successMessage}
