@@ -4,18 +4,15 @@ import { ref, uploadBytes, listAll, getDownloadURL } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../../Atoms/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import { useFaceRecognition } from '../../../Context';
 
-const FaceRecognition = () => {
+const FaceUpload = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [imageURL, setImageURL] = useState([]);
-    const [uploaded, setUploaded] = useState(false);
+
     const [successMessage, setSuccessMessage] = useState('');
 
-    const { faceRecognized, setFaceRecognized } = useFaceRecognition();
     let imageSelected = imageURL[0];
 
-    console.log(faceRecognized);
     const onFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
@@ -50,14 +47,12 @@ const FaceRecognition = () => {
         fetch('https://api.edenai.run/v2/image/face_recognition/add_face', options)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
-                if (response['amazon']['status']=== 'success') {
+                console.log(response);
+                if (response['amazon']['status'] === 'success') {
                     setSuccessMessage('Successfully uploaded file');
-                    setUploaded(true);
                 }
             })
             .catch((err) => console.error(err));
-
     };
 
     // get all images from firebase storage
@@ -82,39 +77,9 @@ const FaceRecognition = () => {
         listImages();
     }, []);
 
-    const FaceRecognition = () => {
-        const options = {
-            method: 'POST',
-            headers: {
-                accept: 'application/json',
-                'content-type': 'application/json',
-                authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-            },
-            body: JSON.stringify({
-                response_as_dict: true,
-                attributes_as_list: false,
-                show_original_response: false,
-                providers: 'amazon',
-                file_url: imageSelected,
-            }),
-        };
-
-        fetch('https://api.edenai.run/v2/image/face_recognition/recognize', options)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-                if (response['amazon']['status'] === 'success') {
-                    setSuccessMessage('Face Recognized');
-                    setFaceRecognized(true);
-                }
-            })
-            .catch((err) => console.error(err));
-
-    };
-
     const navigate = useNavigate();
     const handleButtonClick = () => {
-        navigate('/ImageClassification');
+        navigate('/FaceRec');
     };
 
     return (
@@ -141,33 +106,22 @@ const FaceRecognition = () => {
             ) : (
                 <h2 style={{ textAlign: 'center', marginTop: '80px' }}>None....</h2>
             )}
-            {uploaded && (
-                <div style={{ marginLeft: '30px' }}>
-                    <Button
-                        text='Face Recognition'
-                        onClick={FaceRecognition}
-                        marginTop={'50px'}
-                        marginLeft={'10px'}
-                        backgroundColor={'blue'}
-                    />
-                </div>
-            )}
+
             <p style={{ color: 'green', marginLeft: '50px', fontWeight: 'bold' }}>
                 {successMessage}
             </p>
-            {faceRecognized && successMessage === 'Face Recognized' && (
-                <>
-                    <Button
-                        text='Continue'
-                        onClick={handleButtonClick}
-                        marginTop={'50px'}
-                        marginLeft={'40px'}
-                        backgroundColor={'blue'}
-                    />
-                </>
-            )}
+
+            <>
+                <Button
+                    text='Continue'
+                    onClick={handleButtonClick}
+                    marginTop={'50px'}
+                    marginLeft={'40px'}
+                    backgroundColor={'blue'}
+                />
+            </>
         </>
     );
 };
 
-export default FaceRecognition;
+export default FaceUpload;

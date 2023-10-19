@@ -30,6 +30,7 @@ export default function TextImageGenerator() {
         fetch('https://api.edenai.run/v2/image/generation', options)
             .then((response) => response.json())
             .then((response) => {
+                console.log(response)
                 const newImages = [
                     ...Images,
                     {
