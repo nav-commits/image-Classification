@@ -5,7 +5,7 @@ import Button from '../Atoms/Button/Button';
 function Home() {
     const navigate = useNavigate();
     const handleButtonClick = () => {
-        navigate('/FaceRec')
+        navigate('/FaceUpload')
     };
     return (
         <div style={{ margin: '50px', padding: '50px' }}>

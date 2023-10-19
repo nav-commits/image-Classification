@@ -57,6 +57,8 @@ function ImageClassification() {
     }, [imgUrl, history]);
 
 
+    console.log(results)
+
     const handleButtonClick = () => {
         navigate('/TextImageGenerator');
     };
